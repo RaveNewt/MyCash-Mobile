@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:my_cash_mobile/pages/onboarding_page.dart';
+import 'package:my_cash_mobile/pages/sign_up_page.dart';
 import 'package:my_cash_mobile/pages/test.dart';
+import 'package:onboarding/onboarding.dart';
 
-class splash_screen extends StatefulWidget {
-  const splash_screen({super.key});
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
 
   @override
-  State<splash_screen> createState() => _splash_screenState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _splash_screenState extends State<splash_screen> {
+class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => onboarding_page()));
+      Navigator.pushNamed(context, "/sign-up");
     });
   }
 

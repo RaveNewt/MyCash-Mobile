@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_cash_mobile/theme.dart';
 
-class onboarding_page extends StatefulWidget {
-  const onboarding_page({super.key});
+class OnBoardingPage extends StatefulWidget {
+  const OnBoardingPage({super.key});
 
   @override
-  State<onboarding_page> createState() => _onboarding_pageState();
+  State<OnBoardingPage> createState() => _OnBoardingPageState();
 }
 
-class _onboarding_pageState extends State<onboarding_page> {
+class _OnBoardingPageState extends State<OnBoardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
