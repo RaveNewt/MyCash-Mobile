@@ -12,6 +12,7 @@ Color blackColor = Color(0xff2B3347);
 Color blackColor50 = Color(0x802B3347);
 Color blackColor30 = Color(0x4D2B3347);
 Color greyColor = Color.fromARGB(180, 0, 0, 0);
+Color navColor = Color(0xffF8FDFA);
 
 TextStyle primaryTextStyle = GoogleFonts.poppins(
   color: blackColor,

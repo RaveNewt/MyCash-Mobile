@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_cash_mobile/pages/edit_profile.dart';
 import 'package:my_cash_mobile/pages/home/article.dart';
 import 'package:my_cash_mobile/pages/home/home.dart';
 import 'package:my_cash_mobile/pages/home/main_page.dart';
@@ -37,8 +38,9 @@ class MyApp extends StatelessWidget {
           '/': (context) => SplashPage(),
           '/login': (context) => LoginPage(),
           '/sign-up': (context) => SignUpPage(),
+          '/main': (context) => MainPage(),
           '/home': (context) => HomePage(),
-          '/edit-profile': (context) => ProfilePage(),
+          '/edit-profile': (context) => EditProfile(),
           '/cart': (context) => ArticlePage(),
           '/checkout': (context) => StatisticPage(),
           '/checkout-success': (context) => ProfilePage(),

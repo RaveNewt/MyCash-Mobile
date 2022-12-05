@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       )) {
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/main');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -166,8 +166,10 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: defaultMargin,
+            margin: EdgeInsets.only(
+              left: defaultMargin,
+              right: defaultMargin,
+              bottom: 24,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -15,17 +15,63 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
+    TextEditingController amountController = TextEditingController(text: '');
     PageProvider pageProvider = Provider.of<PageProvider>(context);
+    Widget amountInput() {
+      return Container(
+          margin: EdgeInsets.only(top: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Fullname",
+                style: primaryTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: regular,
+                ),
+              ),
+              SizedBox(
+                height: 7,
+              ),
+              TextField(
+                controller: amountController,
+                cursorColor: primaryColor,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    gapPadding: 16,
+                  ),
+                  hintText: "My Cash",
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: greyColor,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ));
+    }
 
     Widget cartButton() {
       return FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/cart');
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [],
+                );
+              });
         },
+        elevation: 8,
         backgroundColor: primaryColor,
         child: Image.asset(
-          'assets/icon_cart.png',
+          'assets/icon/ic_add.png',
           width: 20,
+          color: bglight,
         ),
       );
     }
@@ -40,6 +86,10 @@ class _MainPageState extends State<MainPage> {
           notchMargin: 12,
           clipBehavior: Clip.antiAlias,
           child: BottomNavigationBar(
+            unselectedLabelStyle: const TextStyle(
+              fontSize: 12,
+              // color: blackColor,
+            ),
             backgroundColor: bglight,
             currentIndex: pageProvider.currentIndex,
             onTap: (value) {
@@ -55,14 +105,14 @@ class _MainPageState extends State<MainPage> {
                     bottom: 10,
                   ),
                   child: Image.asset(
-                    'assets/icon_home.png',
-                    width: 21,
+                    'assets/icon/ic_home.png',
+                    width: 24,
                     color: pageProvider.currentIndex == 0
                         ? primaryColor
                         : Color(0xff808191),
                   ),
                 ),
-                label: '',
+                label: 'Home',
               ),
               BottomNavigationBarItem(
                 icon: Container(
@@ -71,14 +121,14 @@ class _MainPageState extends State<MainPage> {
                     bottom: 10,
                   ),
                   child: Image.asset(
-                    'assets/icon_chat.png',
-                    width: 20,
+                    'assets/icon/ic_chart.png',
+                    width: 24,
                     color: pageProvider.currentIndex == 1
                         ? primaryColor
                         : Color(0xff808191),
                   ),
                 ),
-                label: '',
+                label: 'statictic',
               ),
               BottomNavigationBarItem(
                 icon: Container(
@@ -87,14 +137,14 @@ class _MainPageState extends State<MainPage> {
                     bottom: 10,
                   ),
                   child: Image.asset(
-                    'assets/icon_wishlist.png',
-                    width: 20,
+                    'assets/icon/ic_article.png',
+                    width: 24,
                     color: pageProvider.currentIndex == 2
                         ? primaryColor
                         : Color(0xff808191),
                   ),
                 ),
-                label: '',
+                label: 'article',
               ),
               BottomNavigationBarItem(
                 icon: Container(
@@ -103,14 +153,14 @@ class _MainPageState extends State<MainPage> {
                     bottom: 10,
                   ),
                   child: Image.asset(
-                    'assets/icon_profile.png',
-                    width: 18,
+                    'assets/icon/ic_profile.png',
+                    width: 24,
                     color: pageProvider.currentIndex == 3
                         ? primaryColor
                         : Color(0xff808191),
                   ),
                 ),
-                label: '',
+                label: 'profile',
               ),
             ],
           ),
@@ -122,16 +172,16 @@ class _MainPageState extends State<MainPage> {
       switch (pageProvider.currentIndex) {
         case 0:
           return HomePage();
-          break;
+        // break;
         case 1:
           return StatisticPage();
-          break;
+        // break;
         case 2:
           return ArticlePage();
-          break;
+        // break;
         case 3:
           return ProfilePage();
-          break;
+        // break;
 
         default:
           return HomePage();
@@ -139,8 +189,7 @@ class _MainPageState extends State<MainPage> {
     }
 
     return Scaffold(
-      backgroundColor:
-          pageProvider.currentIndex == 0 ? primaryColor : blackColor,
+      backgroundColor: pageProvider.currentIndex == 0 ? navColor : navColor,
       floatingActionButton: cartButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: customBottomNav(),

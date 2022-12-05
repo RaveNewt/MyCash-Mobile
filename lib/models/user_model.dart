@@ -1,23 +1,23 @@
 class UserModel {
-  late int id;
-  late String? fullname;
-  late String? email;
-  late String? age;
-  late String? password;
-  late String? phonenumber;
-  late String? profilePhotoUrl;
-  late String? token;
+  int? id;
+  String? fullname;
+  String? email;
+  String? age;
+  String? password;
+  String? phonenumber;
+  String? profilePhotoUrl;
+  String? token;
 
-  UserModel(
-    this.id,
+  UserModel({
+    required this.id,
     this.fullname,
-    this.email,
-    this.password,
+    required this.email,
+    required this.password,
     this.age,
     this.phonenumber,
     this.profilePhotoUrl,
     this.token,
-  );
+  });
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

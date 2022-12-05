@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 class AuthService {
   String baseUrl = 'http://10.0.2.2:3000';
+  // String baseUrl = 'https://reqres.in';
 
   Future<UserModel> register({
     String? fullname,
@@ -30,11 +31,11 @@ class AuthService {
       body: body,
     );
 
-    print(json.decode(response.body));
+    print(response.body);
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
-      UserModel user = UserModel.fromJson(data['user']);
+    if (response.statusCode == 201) {
+      var data = jsonDecode(response.body);
+      UserModel user = UserModel.fromJson(data);
 
       return user;
     } else {
@@ -46,28 +47,36 @@ class AuthService {
     String? email,
     String? password,
   }) async {
-    var url = '$baseUrl/user/';
+    var url = '$baseUrl/user/login';
+    // var url = '$baseUrl/api/login';
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({
       'email': email,
       'password': password,
     });
+    try {
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
 
-    http.Response response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
-    );
-
-    print(response.body);
-
-    if (response.statusCode == 200) {
+      print(response.body);
+      print(response.statusCode);
       var data = jsonDecode(response.body)['data'];
-      UserModel user = UserModel.fromJson(data['user']);
-
-      return user;
-    } else {
-      throw Exception('Gagal Login');
+      UserModel user = UserModel.fromJson(data);
+      print(data);
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body)['data']; //['data'];
+        UserModel user = UserModel.fromJson(data);
+        // data.token = 'Bearer ' + data['access_token'];
+        // print(data['user']);
+        return user;
+      } else {
+        throw Exception('Gagal Login');
+      }
+    } catch (error) {
+      throw error;
     }
   }
 }
