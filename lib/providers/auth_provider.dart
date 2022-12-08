@@ -36,6 +36,30 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> edit({
+    int? id,
+    String? fullname,
+    String? age,
+    String? phonenumber,
+    String? email,
+  }) async {
+    try {
+      UserModel user = await AuthService().edit(
+        id: id,
+        fullname: fullname,
+        age: age,
+        phonenumber: phonenumber,
+        email: email,
+      );
+
+      _user = user;
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<bool> login({
     String? email,
     String? password,

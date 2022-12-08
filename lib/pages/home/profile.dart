@@ -41,43 +41,38 @@ class _ProfilePageState extends State<ProfilePage> {
 
     Widget Card() {
       return SafeArea(
-        child: Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: Container(
-              width: double.infinity,
-              height: 110,
-              margin: EdgeInsets.only(top: 24, left: 24, right: 24),
-              padding:
-                  EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 16),
-              decoration: BoxDecoration(
-                color: blackColor,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 30,
-                    offset: Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Text("Total Balance",
-                      style: primaryTextStyle.copyWith(
-                          fontSize: 13, fontWeight: regular, color: bglight)),
-                  SizedBox(
-                    height: 8,
-                    width: 16,
-                  ),
-                  Text("Rp. 1.000.000",
-                      style: primaryTextStyle.copyWith(
-                          fontSize: 24,
-                          fontWeight: semiBold,
-                          color: primaryColor)),
-                ],
-              )),
-        ),
+        child: Container(
+            width: double.infinity,
+            height: 110,
+            margin: EdgeInsets.only(top: 24, left: 24, right: 24),
+            padding: EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 16),
+            decoration: BoxDecoration(
+              color: blackColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 30,
+                  offset: Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Text("Total Balance",
+                    style: primaryTextStyle.copyWith(
+                        fontSize: 13, fontWeight: regular, color: bglight)),
+                SizedBox(
+                  height: 8,
+                  width: 16,
+                ),
+                Text("Rp. 1.000.000",
+                    style: primaryTextStyle.copyWith(
+                        fontSize: 24,
+                        fontWeight: semiBold,
+                        color: primaryColor)),
+              ],
+            )),
       );
     }
 

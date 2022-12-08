@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/pages/home/article.dart';
 import 'package:my_cash_mobile/pages/home/home.dart';
 import 'package:my_cash_mobile/pages/home/profile.dart';
 import 'package:my_cash_mobile/pages/home/statistic.dart';
+import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:my_cash_mobile/providers/page_provider.dart';
+import 'package:my_cash_mobile/providers/transaction_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -12,19 +15,50 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
+TextEditingController amountController = TextEditingController(text: '');
+bool isLoading = false;
+
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController amountController = TextEditingController(text: '');
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+    TransactionProvider transactionProvider =
+        Provider.of<TransactionProvider>(context);
+    handleIncome() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await transactionProvider.income(
+          amount: int.parse(amountController.text), userid: user.id)) {
+        Navigator.pushNamed(context, '/main');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: dangerColor,
+            content: Text(
+              'Gagal Register!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     PageProvider pageProvider = Provider.of<PageProvider>(context);
     Widget amountInput() {
       return Container(
-          margin: EdgeInsets.only(top: 12),
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          margin: EdgeInsets.only(top: 24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Fullname",
+                "Amount",
                 style: primaryTextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: regular,
@@ -41,7 +75,7 @@ class _MainPageState extends State<MainPage> {
                     borderRadius: BorderRadius.circular(8),
                     gapPadding: 16,
                   ),
-                  hintText: "My Cash",
+                  hintText: "Rp: 100.000",
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
@@ -54,15 +88,50 @@ class _MainPageState extends State<MainPage> {
           ));
     }
 
+    Widget submitButton() {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.only(top: 30),
+        child: TextButton(
+          onPressed: handleIncome,
+          style: TextButton.styleFrom(
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: Text(
+            'Submit',
+            style: primaryTextStyle.copyWith(
+                fontSize: 16, fontWeight: medium, color: bglight),
+          ),
+        ),
+      );
+    }
+
     Widget cartButton() {
       return FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
               context: context,
               builder: (context) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [],
+                return Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 24,
+                  ),
+                  margin: EdgeInsets.only(
+                    top: 24,
+                    left: 24,
+                    right: 24,
+                  ),
+                  child: Column(
+                    children: [
+                      amountInput(),
+                      submitButton(),
+                    ],
+                  ),
                 );
               });
         },

@@ -11,6 +11,7 @@ import 'package:my_cash_mobile/pages/sign_up_page.dart';
 import 'package:my_cash_mobile/pages/splash_screen.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:my_cash_mobile/providers/page_provider.dart';
+import 'package:my_cash_mobile/providers/transaction_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => PageProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TransactionProvider(),
         ),
       ],
       child: MaterialApp(

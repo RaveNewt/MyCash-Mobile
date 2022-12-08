@@ -39,7 +39,7 @@ class _SignUpPageState extends State<SignUpPage> {
         email: emailController.text,
         password: passwordController.text,
       )) {
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/main');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

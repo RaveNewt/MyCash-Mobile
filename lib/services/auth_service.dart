@@ -43,6 +43,41 @@ class AuthService {
     }
   }
 
+  Future<UserModel> edit({
+    int? id,
+    String? fullname,
+    String? age,
+    String? phonenumber,
+    String? email,
+  }) async {
+    var url = '$baseUrl/user/${id}';
+    var headers = {'Content-Type': 'application/json'};
+    var body = jsonEncode({
+      'fullname': fullname,
+      'age': age,
+      'phonenumber': phonenumber,
+      'email': email,
+    });
+    print(url);
+
+    http.Response response = await http.put(
+      Uri.parse(url),
+      headers: headers,
+      body: body,
+    );
+
+    print(response.body);
+
+    if (response.statusCode == 201) {
+      var data = jsonDecode(response.body);
+      UserModel user = UserModel.fromJson(data);
+
+      return user;
+    } else {
+      throw Exception('Gagal Ganti Data');
+    }
+  }
+
   Future<UserModel> login({
     String? email,
     String? password,

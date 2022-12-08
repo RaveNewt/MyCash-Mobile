@@ -3,6 +3,7 @@ import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -11,16 +12,62 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfileState();
 }
 
+bool isLoading = false;
+
 class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    String baseUrl = 'http://10.0.2.2:3000';
     UserModel user = authProvider.user;
+    TextEditingController fullnameController =
+        TextEditingController(text: "${user.fullname}");
+    TextEditingController ageController =
+        TextEditingController(text: "${user.age}");
+
+    TextEditingController phoneController =
+        TextEditingController(text: "${user.phonenumber}");
+
+    TextEditingController emailController =
+        TextEditingController(text: "${user.email}");
+    print(user.id);
+
+    handleEdit() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await authProvider.edit(
+        id: user.id,
+        fullname: fullnameController.text,
+        age: ageController.text,
+        phonenumber: phoneController.text,
+        email: emailController.text,
+      )) {
+        print(user.id);
+        Navigator.pushNamed(context, '/main');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: dangerColor,
+            content: Text(
+              'Gagal Ganti Data!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
 
     Widget header() {
       return AppBar(
         leading: IconButton(
           icon: Icon(Icons.close),
+          color: primaryColor,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -41,7 +88,7 @@ class _EditProfileState extends State<EditProfile> {
               Icons.check,
               color: primaryColor,
             ),
-            onPressed: () {},
+            onPressed: handleEdit,
           )
         ],
       );
@@ -61,7 +108,8 @@ class _EditProfileState extends State<EditProfile> {
                 fontSize: 13,
               ),
             ),
-            TextFormField(
+            TextField(
+              controller: fullnameController,
               style: primaryTextStyle,
               decoration: InputDecoration(
                 hintText: user.fullname,
@@ -92,10 +140,11 @@ class _EditProfileState extends State<EditProfile> {
                 fontSize: 13,
               ),
             ),
-            TextFormField(
+            TextField(
+              keyboardType: TextInputType.number,
+              controller: ageController,
               style: primaryTextStyle,
               decoration: InputDecoration(
-                hintText: '${user.age}',
                 hintStyle: primaryTextStyle,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -123,10 +172,11 @@ class _EditProfileState extends State<EditProfile> {
                 fontSize: 13,
               ),
             ),
-            TextFormField(
+            TextField(
+              keyboardType: TextInputType.number,
+              controller: phoneController,
               style: primaryTextStyle,
               decoration: InputDecoration(
-                hintText: '${user.phonenumber}',
                 hintStyle: primaryTextStyle,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -154,10 +204,10 @@ class _EditProfileState extends State<EditProfile> {
                 fontSize: 13,
               ),
             ),
-            TextFormField(
+            TextField(
+              controller: emailController,
               style: primaryTextStyle,
               decoration: InputDecoration(
-                hintText: user.email,
                 hintStyle: primaryTextStyle,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
