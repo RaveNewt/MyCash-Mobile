@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
-import 'package:my_cash_mobile/providers/data_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:my_cash_mobile/widget/loading_button.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    DataProvider dataProvider = Provider.of<DataProvider>(context);
 
     handleSignUp() async {
       Navigator.pushNamed(context, '/sign-up');
@@ -37,9 +34,6 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       )) {
         Navigator.pushNamed(context, '/main');
-        // await dataProvider.getIncome(id: user.id);
-        // await dataProvider.getExpense();
-        // print(user.id);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

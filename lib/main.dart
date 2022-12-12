@@ -9,6 +9,7 @@ import 'package:my_cash_mobile/pages/login_page.dart';
 import 'package:my_cash_mobile/pages/onboarding_page.dart';
 import 'package:my_cash_mobile/pages/sign_up_page.dart';
 import 'package:my_cash_mobile/pages/splash_screen.dart';
+import 'package:my_cash_mobile/pages/transaction.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:my_cash_mobile/providers/data_provider.dart';
 import 'package:my_cash_mobile/providers/page_provider.dart';
@@ -51,8 +52,9 @@ class MyApp extends StatelessWidget {
           '/home': (context) => HomePage(),
           '/edit-profile': (context) => EditProfile(),
           '/cart': (context) => ArticlePage(),
-          '/checkout': (context) => StatisticPage(),
-          '/checkout-success': (context) => ProfilePage(),
+          '/statistic': (context) => StatisticPage(),
+          '/profile': (context) => ProfilePage(),
+          '/transaction': (context) => TransactionScreen(),
         },
         // home: HomePage(),
       ),

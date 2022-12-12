@@ -14,10 +14,11 @@ class DataProvider with ChangeNotifier {
 
   Future<void> getIncome({
     int? userid,
+    int? amount,
   }) async {
     try {
       List<TransactionModel> datas =
-          await DataService().getIncome(userid: userid);
+          await DataService().getIncome(userid: userid, amount: amount);
       _datas = datas;
     } catch (e) {
       print(e);

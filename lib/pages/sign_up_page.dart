@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
-import 'package:my_cash_mobile/providers/data_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:my_cash_mobile/widget/loading_button.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +35,6 @@ class _SignUpPageState extends State<SignUpPage> {
       setState(() {
         isLoading = true;
       });
-      await Provider.of<DataProvider>(context, listen: false).getIncome();
 
       if (await authProvider.register(
         fullname: fullnameController.text,

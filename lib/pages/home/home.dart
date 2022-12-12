@@ -22,41 +22,44 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    super.initState();
     getInit();
+    super.initState();
   }
 
   getInit() async {
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-    UserModel user = authProvider.user;
-    await Provider.of<DataProvider>(context, listen: false)
-        .getIncome(userid: user.id);
-    await Provider.of<DataProvider>(context, listen: false)
-        .getExpense(userid: user.id);
     // await Provider.of<TransactionProvider>(context, listen: false)
-    //     .getSUM(userid: user.id);
+    //     .getSUM(userid: 1);
   }
 
   Widget build(BuildContext context) {
+    // Provider
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
     DataProvider dataProvider = Provider.of<DataProvider>(context);
-    // Provider.of<TransactionProvider>(context, listen: false)
-    //     .getSUM(userid: user.id);
-    // TransactionProvider transactionProvider =
-    //     Provider.of<TransactionProvider>(context);
-    // TransactionModel transactionModel = transactionProvider.transaction;
+    TransactionProvider? transactionProvider =
+        Provider.of<TransactionProvider>(context);
+    TransactionModel? transaction = transactionProvider.transaction;
     List<TransactionModel> datas = dataProvider.datas;
+
+    // get data
+    Provider.of<DataProvider>(context, listen: false)
+        .getIncome(userid: user.id);
+    Provider.of<DataProvider>(context, listen: false)
+        .getExpense(userid: user.id);
+    Provider.of<TransactionProvider>(context, listen: false)
+        .getSUM(userid: user.id);
+
     print(datas);
+
     changeIncome() async {
       await Provider.of<DataProvider>(context, listen: false)
           .getIncome(userid: user.id);
+      await Provider.of<TransactionProvider>(context, listen: false)
+          .getSUM(userid: user.id);
       setState(() {
         isIncome = true;
         print(isIncome);
       });
-      Navigator.pushNamed(context, '/main');
     }
 
     changeExpenses() async {
@@ -66,7 +69,6 @@ class _HomePageState extends State<HomePage> {
         isIncome = false;
         print(isIncome);
       });
-      Navigator.pushNamed(context, '/main');
     }
 
     Widget Header() {
@@ -86,26 +88,31 @@ class _HomePageState extends State<HomePage> {
         ),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundImage: AssetImage(
-                  'assets/illustration/profile.png',
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/edit-profile');
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 24,
+                  backgroundImage: AssetImage(
+                    'assets/illustration/profile.png',
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 16,
-              ),
-              Text(
-                "${user.fullname}",
-                style: primaryTextStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: semiBold,
+                SizedBox(
+                  width: 16,
                 ),
-              ),
-            ],
+                Text(
+                  "${user.fullname}",
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 18,
+                    fontWeight: semiBold,
+                  ),
+                ),
+              ],
+            ),
           ),
           Icon(
             Icons.notifications,
@@ -134,26 +141,27 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Total Balance",
-                    style: primaryTextStyle.copyWith(
-                        fontSize: 11, fontWeight: regular, color: bglight)),
+                Center(
+                  widthFactor: 1,
+                  child: Text("Total Balance",
+                      style: primaryTextStyle.copyWith(
+                          fontSize: 11, fontWeight: regular, color: bglight)),
+                ),
                 SizedBox(
                   height: 8,
                 ),
-                Text("100000",
+                Text("${transaction.total_amount}",
                     style: primaryTextStyle.copyWith(
-                        fontSize: 18,
+                        fontSize: 32,
                         fontWeight: semiBold,
                         color: primaryColor)),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       width: 100,
-                      margin: EdgeInsets.only(top: 32),
+                      margin: EdgeInsets.only(top: 16),
                       child: TextButton(
                         onPressed: (() => {
                               setState(() {
@@ -183,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       width: 100,
-                      margin: EdgeInsets.only(top: 32),
+                      margin: EdgeInsets.only(top: 16),
                       child: TextButton(
                         onPressed: (() => {
                               setState(() {
@@ -279,7 +287,7 @@ class _HomePageState extends State<HomePage> {
     Widget Income() {
       return Container(
         margin: EdgeInsets.only(
-          top: 14,
+          top: 8,
         ),
         child: Column(
           children: dataProvider.datas
@@ -294,7 +302,7 @@ class _HomePageState extends State<HomePage> {
     Widget Expense() {
       return Container(
         margin: EdgeInsets.only(
-          top: 14,
+          top: 8,
         ),
         child: Column(
           children: dataProvider.datas
@@ -306,13 +314,40 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    return ListView(
-      children: [
-        Header(),
-        Card(),
-        Category(),
-        isIncome ? Income() : Expense(),
-      ],
+    Widget TextTransaction(String type) {
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 24),
+        margin: EdgeInsets.only(top: 20),
+        child: Text(type,
+            style: primaryTextStyle.copyWith(
+              fontSize: 32,
+              fontWeight: bold,
+            )),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(12),
+          child: Container(
+            color: Colors.white,
+            height: 1,
+          ),
+        ),
+        automaticallyImplyLeading: false,
+        titleSpacing: 0,
+        backgroundColor: bglight,
+        title: Header(),
+      ),
+      body: ListView(
+        children: [
+          Card(),
+          Category(),
+          isIncome ? TextTransaction('Income') : TextTransaction('Expenses'),
+          isIncome ? Income() : Expense(),
+        ],
+      ),
     );
   }
 }

@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class DataService {
   String baseUrl = 'http://10.0.2.2:3000';
 
-  Future<List<TransactionModel>> getIncome({int? userid}) async {
+  Future<List<TransactionModel>> getIncome({int? userid, int? amount}) async {
     // AuthProvider authProvider = Provider.of<AuthProvider>(context);
     // UserModel user = authProvider.user;
     var url = '$baseUrl/income/${userid}';

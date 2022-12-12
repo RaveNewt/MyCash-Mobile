@@ -41,6 +41,8 @@ dependencies:
     provider: ^6.0.4
     http: ^0.13.0
     introduction_screen: ^3.1.1
+    syncfusion_flutter_charts: ^20.3.60
+    d_chart: ^1.0.0
 
 dev_dependencies:
     flutter_test:

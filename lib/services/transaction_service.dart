@@ -12,7 +12,7 @@ class TransactionService {
     int? amount,
     int? userid,
   }) async {
-    var url = '$baseUrl/trans/${userid}';
+    var url = '$baseUrl/income/${userid}';
     // var url = '$baseUrl/api/login';
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({
@@ -27,7 +27,7 @@ class TransactionService {
       );
 
       print(response.body);
-      print(response.statusCode);
+      print(url);
       var data = jsonDecode(response.body);
       TransactionModel transaction = TransactionModel.fromJson(data);
       print(data);
@@ -86,7 +86,7 @@ class TransactionService {
     int? total_amount,
     int? userid,
   }) async {
-    var url = '$baseUrl/expense/${userid}';
+    var url = '$baseUrl/trans/${userid}';
     // var url = '$baseUrl/api/login';
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({
@@ -101,7 +101,7 @@ class TransactionService {
       );
 
       print(response.body);
-      print(response.statusCode);
+      print(url);
       var data = jsonDecode(response.body);
       TransactionModel transaction = TransactionModel.fromJson(data);
       print(data);

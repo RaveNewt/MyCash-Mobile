@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_cash_mobile/models/transaction_model.dart';
 import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
+import 'package:my_cash_mobile/providers/transaction_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +18,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
+    TransactionProvider transactionProvider =
+        Provider.of<TransactionProvider>(context);
+    TransactionModel transaction = transactionProvider.transaction;
     bool isLoading = false;
+
+    Provider.of<TransactionProvider>(context, listen: false)
+        .getSUM(userid: user.id);
 
     Widget Header() {
       return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -66,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 8,
                   width: 16,
                 ),
-                Text("Rp. 1.000.000",
+                Text("Rp. ${transaction.total_amount}",
                     style: primaryTextStyle.copyWith(
                         fontSize: 24,
                         fontWeight: semiBold,
