@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:my_cash_mobile/models/transaction_model.dart';
 import 'package:my_cash_mobile/services/data_service.dart';
 
-class ProductProvider with ChangeNotifier {
-  late List<TransactionModel> _datas = [];
+class DataProvider with ChangeNotifier {
+  List<TransactionModel> _datas = [];
 
   List<TransactionModel> get datas => _datas;
 
@@ -12,9 +12,22 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getProducts() async {
+  Future<void> getIncome({
+    int? userid,
+  }) async {
     try {
-      List<TransactionModel> products = await DataService().getIncome();
+      List<TransactionModel> datas =
+          await DataService().getIncome(userid: userid);
+      _datas = datas;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getExpense({int? userid}) async {
+    try {
+      List<TransactionModel> datas =
+          await DataService().getExpense(userid: userid);
       _datas = datas;
     } catch (e) {
       print(e);

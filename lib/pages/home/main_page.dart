@@ -17,6 +17,7 @@ class MainPage extends StatefulWidget {
 
 TextEditingController amountController = TextEditingController(text: '');
 bool isLoading = false;
+bool isIncome = true;
 
 class _MainPageState extends State<MainPage> {
   @override
@@ -25,12 +26,55 @@ class _MainPageState extends State<MainPage> {
     UserModel user = authProvider.user;
     TransactionProvider transactionProvider =
         Provider.of<TransactionProvider>(context);
+    print(user.id);
+
+    changeIncome() async {
+      setState(() {
+        isIncome = true;
+        print(isIncome);
+      });
+      Navigator.pushNamed(context, '/main');
+    }
+
+    changeExpenses() async {
+      setState(() {
+        isIncome = false;
+        print(isIncome);
+      });
+      Navigator.pushNamed(context, '/main');
+    }
+
     handleIncome() async {
       setState(() {
         isLoading = true;
       });
 
       if (await transactionProvider.income(
+          amount: int.parse(amountController.text), userid: user.id)) {
+        Navigator.pushNamed(context, '/main');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: dangerColor,
+            content: Text(
+              'Gagal Register!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    handleExpenses() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await transactionProvider.expense(
           amount: int.parse(amountController.text), userid: user.id)) {
         Navigator.pushNamed(context, '/main');
       } else {
@@ -94,7 +138,7 @@ class _MainPageState extends State<MainPage> {
         width: double.infinity,
         margin: EdgeInsets.only(top: 30),
         child: TextButton(
-          onPressed: handleIncome,
+          onPressed: isIncome ? handleIncome : handleExpenses,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
@@ -110,29 +154,112 @@ class _MainPageState extends State<MainPage> {
       );
     }
 
-    Widget cartButton() {
+    Widget category() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: defaultMargin,
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: defaultMargin,
+            ),
+            Container(
+              width: 100,
+              height: 40,
+              margin: EdgeInsets.only(right: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: primaryColor,
+              ),
+              child: TextButton(
+                onPressed: changeIncome,
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Income',
+                  style: primaryTextStyle.copyWith(
+                      fontSize: 16, fontWeight: medium, color: bglight),
+                ),
+              ),
+            ),
+            Container(
+              width: 100,
+              height: 40,
+              margin: EdgeInsets.only(right: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: primaryColor,
+              ),
+              child: TextButton(
+                onPressed: changeExpenses,
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Expenses',
+                  style: primaryTextStyle.copyWith(
+                      fontSize: 16, fontWeight: medium, color: bglight),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget modalBottomSheet() {
+      return Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 8,
+        ),
+        margin: EdgeInsets.only(
+          left: 24,
+          right: 24,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(child: category()),
+            SizedBox(
+              height: 24,
+            ),
+            isIncome
+                ? Text('Income',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: medium,
+                    ))
+                : Text('Expenses',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: medium,
+                    )),
+            SizedBox(
+              height: 12,
+            ),
+            amountInput(),
+            submitButton(),
+          ],
+        ),
+      );
+    }
+
+    Widget addButton() {
       return FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
               context: context,
               builder: (context) {
-                return Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 24,
-                  ),
-                  margin: EdgeInsets.only(
-                    top: 24,
-                    left: 24,
-                    right: 24,
-                  ),
-                  child: Column(
-                    children: [
-                      amountInput(),
-                      submitButton(),
-                    ],
-                  ),
-                );
+                return modalBottomSheet();
               });
         },
         elevation: 8,
@@ -258,8 +385,9 @@ class _MainPageState extends State<MainPage> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: pageProvider.currentIndex == 0 ? navColor : navColor,
-      floatingActionButton: cartButton(),
+      floatingActionButton: addButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: customBottomNav(),
       body: body(),

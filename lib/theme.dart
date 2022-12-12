@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 double defaultMargin = 30.0;
 
 Color primaryColor = Color(0xff19A873);
+Color dotsHover = Color(0xffCDEDE2);
 Color bglight = Color(0xffF8FDFA);
 Color dangerColor = Color(0xffD12659);
 Color warningColor = Color(0xffD7D02C);

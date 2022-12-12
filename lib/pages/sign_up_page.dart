@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
+import 'package:my_cash_mobile/providers/data_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:my_cash_mobile/widget/loading_button.dart';
 import 'package:provider/provider.dart';
@@ -27,10 +28,15 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
+    handleLogin() async {
+      Navigator.pushNamed(context, '/login');
+    }
+
     handleSignUp() async {
       setState(() {
         isLoading = true;
       });
+      await Provider.of<DataProvider>(context, listen: false).getIncome();
 
       if (await authProvider.register(
         fullname: fullnameController.text,
@@ -285,8 +291,35 @@ class _SignUpPageState extends State<SignUpPage> {
       );
     }
 
+    Widget loginButton() {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.only(top: 16),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: primaryColor,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: TextButton(
+          onPressed: handleLogin,
+          style: TextButton.styleFrom(
+            backgroundColor: bglight,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: Text(
+            'Login',
+            style: primaryTextStyle.copyWith(
+                fontSize: 16, fontWeight: medium, color: primaryColor),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
@@ -313,6 +346,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   emailInput(),
                   passwordInput(),
                   isLoading ? LoadingButton() : signUpButton(),
+                  loginButton()
                 ],
               )),
         ),

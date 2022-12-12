@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_cash_mobile/models/transaction_model.dart';
 import 'package:my_cash_mobile/models/user_model.dart';
-import 'package:my_cash_mobile/services/auth_service.dart';
 import 'package:my_cash_mobile/services/transaction_service.dart';
 
 class TransactionProvider with ChangeNotifier {
@@ -9,7 +8,7 @@ class TransactionProvider with ChangeNotifier {
 
   TransactionModel get transaction => _transaction;
 
-  set user(UserModel user) {
+  set transaction(TransactionModel transaction) {
     _transaction = transaction;
     notifyListeners();
   }
@@ -32,4 +31,42 @@ class TransactionProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> expense({
+    int? amount,
+    int? userid,
+  }) async {
+    try {
+      TransactionModel transaction = await TransactionService().expense(
+        amount: amount,
+        userid: userid,
+      );
+      print(amount);
+
+      _transaction = transaction as TransactionModel;
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  // Future<bool> getSUM({
+  //   int? total_amount,
+  //   int? userid,
+  // }) async {
+  //   try {
+  //     TransactionModel transaction = await TransactionService().getSUM(
+  //       total_amount: total_amount,
+  //       userid: userid,
+  //     );
+  //     print(total_amount);
+
+  //     _transaction = transaction as TransactionModel;
+  //     return true;
+  //   } catch (e) {
+  //     print(e);
+  //     return false;
+  //   }
+  // }
 }

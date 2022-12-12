@@ -10,6 +10,7 @@ import 'package:my_cash_mobile/pages/onboarding_page.dart';
 import 'package:my_cash_mobile/pages/sign_up_page.dart';
 import 'package:my_cash_mobile/pages/splash_screen.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
+import 'package:my_cash_mobile/providers/data_provider.dart';
 import 'package:my_cash_mobile/providers/page_provider.dart';
 import 'package:my_cash_mobile/providers/transaction_provider.dart';
 import 'package:provider/provider.dart';
@@ -34,12 +35,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => TransactionProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => DataProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'My Cash',
         routes: {
           '/': (context) => SplashPage(),
+          '/onboarding': (context) => OnBoardingPage(),
           '/login': (context) => LoginPage(),
           '/sign-up': (context) => SignUpPage(),
           '/main': (context) => MainPage(),

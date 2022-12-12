@@ -12,7 +12,7 @@ class TransactionService {
     int? amount,
     int? userid,
   }) async {
-    var url = '$baseUrl/income/';
+    var url = '$baseUrl/trans/${userid}';
     // var url = '$baseUrl/api/login';
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({
@@ -32,6 +32,80 @@ class TransactionService {
       TransactionModel transaction = TransactionModel.fromJson(data);
       print(data);
       if (response.statusCode == 201) {
+        var data = jsonDecode(response.body); //['data'];
+        TransactionModel transaction = TransactionModel.fromJson(data);
+        // data.token = 'Bearer ' + data['access_token'];
+        // print(data['user']);
+        return transaction;
+      } else {
+        throw Exception('Gagal masukkin data');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<TransactionModel> expense({
+    int? amount,
+    int? userid,
+  }) async {
+    var url = '$baseUrl/expense/${userid}';
+    // var url = '$baseUrl/api/login';
+    var headers = {'Content-Type': 'application/json'};
+    var body = jsonEncode({
+      'amount': amount,
+      'userID': userid,
+    });
+    try {
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+
+      print(response.body);
+      print(response.statusCode);
+      var data = jsonDecode(response.body);
+      TransactionModel transaction = TransactionModel.fromJson(data);
+      print(data);
+      if (response.statusCode == 201) {
+        var data = jsonDecode(response.body); //['data'];
+        TransactionModel transaction = TransactionModel.fromJson(data);
+        // data.token = 'Bearer ' + data['access_token'];
+        // print(data['user']);
+        return transaction;
+      } else {
+        throw Exception('Gagal masukkin data');
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<TransactionModel> getSUM({
+    int? total_amount,
+    int? userid,
+  }) async {
+    var url = '$baseUrl/expense/${userid}';
+    // var url = '$baseUrl/api/login';
+    var headers = {'Content-Type': 'application/json'};
+    var body = jsonEncode({
+      'total_amount': total_amount,
+      'userID': userid,
+    });
+    try {
+      http.Response response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+
+      print(response.body);
+      print(response.statusCode);
+      var data = jsonDecode(response.body);
+      TransactionModel transaction = TransactionModel.fromJson(data);
+      print(data);
+      if (response.statusCode == 200) {
         var data = jsonDecode(response.body); //['data'];
         TransactionModel transaction = TransactionModel.fromJson(data);
         // data.token = 'Bearer ' + data['access_token'];

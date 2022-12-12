@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
+import 'package:my_cash_mobile/providers/data_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:my_cash_mobile/widget/loading_button.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    DataProvider dataProvider = Provider.of<DataProvider>(context);
+
+    handleSignUp() async {
+      Navigator.pushNamed(context, '/sign-up');
+    }
 
     handleSignIn() async {
       setState(() {
@@ -30,6 +37,9 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       )) {
         Navigator.pushNamed(context, '/main');
+        // await dataProvider.getIncome(id: user.id);
+        // await dataProvider.getExpense();
+        // print(user.id);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -52,8 +62,8 @@ class _LoginPageState extends State<LoginPage> {
         heightFactor: 1,
         child: Container(
           margin: EdgeInsets.only(top: 70),
-          width: 300,
-          height: 300,
+          width: 200,
+          height: 200,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
@@ -145,47 +155,87 @@ class _LoginPageState extends State<LoginPage> {
         height: 50,
         width: double.infinity,
         margin: EdgeInsets.only(top: 30),
-        child: TextButton(
-          onPressed: handleSignIn,
-          style: TextButton.styleFrom(
-            backgroundColor: primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          child: TextButton(
+            onPressed: handleSignIn,
+            style: TextButton.styleFrom(
+              backgroundColor: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Text(
+              'Sign In',
+              style: primaryTextStyle.copyWith(
+                  fontSize: 16, fontWeight: medium, color: bglight),
             ),
           ),
-          child: Text(
-            'Sign In',
-            style: primaryTextStyle.copyWith(
-                fontSize: 16, fontWeight: medium, color: bglight),
+        ),
+      );
+    }
+
+    Widget signUpButton() {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.only(top: 30),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: primaryColor,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Material(
+          child: InkWell(
+            hoverColor: primaryColor,
+            splashColor: primaryColor,
+            child: TextButton(
+              onPressed: handleSignUp,
+              style: TextButton.styleFrom(
+                backgroundColor: bglight,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                'Sign Up',
+                style: primaryTextStyle.copyWith(
+                    fontSize: 16, fontWeight: medium, color: primaryColor),
+              ),
+            ),
           ),
         ),
       );
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Container(
-            margin: EdgeInsets.only(
-              left: defaultMargin,
-              right: defaultMargin,
-              bottom: 24,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                imageIllustration(),
-                Spacer(flex: 12),
-                Text("Login",
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 24,
-                      fontWeight: semiBold,
-                    )),
-                emailInput(),
-                passwordInput(),
-                isLoading ? LoadingButton() : signInButton(),
-              ],
-            )),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Container(
+              margin: EdgeInsets.only(
+                left: defaultMargin,
+                right: defaultMargin,
+                bottom: 24,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  imageIllustration(),
+                  SizedBox(
+                    height: 47,
+                  ),
+                  Text("Login",
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 24,
+                        fontWeight: semiBold,
+                      )),
+                  emailInput(),
+                  passwordInput(),
+                  isLoading ? LoadingButton() : signInButton(),
+                  signUpButton(),
+                ],
+              )),
+        ),
       ),
     );
   }

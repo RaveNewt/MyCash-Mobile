@@ -7,7 +7,7 @@ class AuthProvider with ChangeNotifier {
 
   UserModel get user => _user;
 
-  set user(UserModel user) {
+  setUser(UserModel user) {
     _user = user;
     notifyListeners();
   }
