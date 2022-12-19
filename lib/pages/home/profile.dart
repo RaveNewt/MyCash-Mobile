@@ -3,6 +3,7 @@ import 'package:my_cash_mobile/models/transaction_model.dart';
 import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:my_cash_mobile/providers/transaction_provider.dart';
+import 'package:my_cash_mobile/services/local_notification_service.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late final NotificationService notificationService;
+  @override
+  void initState() {
+    notificationService = NotificationService();
+    listenToNotificationStream();
+    notificationService.initializePlatformNotifications();
+    super.initState();
+  }
+
+  void listenToNotificationStream() =>
+      notificationService.behaviorSubject.listen((payload) {
+        Navigator.pushNamed(context, '/main', arguments: payload);
+      });
+
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
@@ -43,6 +58,27 @@ class _ProfilePageState extends State<ProfilePage> {
             fontSize: 24,
             fontWeight: semiBold,
           ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.health_and_safety,
+              color: primaryColor,
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Text("Status:",
+                style: primaryTextStyle.copyWith(
+                    fontSize: 16, fontWeight: regular, color: blackColor)),
+            SizedBox(
+              width: 8,
+            ),
+            Text("${transaction.user_status}",
+                style: primaryTextStyle.copyWith(
+                    fontSize: 16, fontWeight: semiBold, color: primaryColor)),
+          ],
         ),
       ]);
     }
@@ -122,6 +158,50 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
 
+    Widget Notification() {
+      return GestureDetector(
+        onTap: () async {
+          if (transaction.user_status == "Health") {
+            await notificationService.showLocalNotification(
+                id: 0,
+                title: "Status Financial:",
+                body: "${transaction.user_status}",
+                payload: "Notification");
+          }
+        },
+        child: Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(top: 16, left: 24, right: 24),
+          padding: EdgeInsets.only(left: 8, top: 16, right: 8, bottom: 16),
+          decoration: BoxDecoration(
+            color: bglight,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 2,
+                offset: Offset(1, 1),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/icon/ic_profile.png',
+                width: 24,
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Text("Notification",
+                  style: primaryTextStyle.copyWith(
+                      fontSize: 16, fontWeight: semiBold, color: blackColor)),
+            ],
+          ),
+        ),
+      );
+    }
+
     Widget Logout() {
       return GestureDetector(
         onTap: () {
@@ -170,7 +250,7 @@ class _ProfilePageState extends State<ProfilePage> {
           top: 24,
         ),
         child: Column(
-          children: [Header(), Card(), Personal(), Logout()],
+          children: [Header(), Card(), Personal(), Notification(), Logout()],
         ),
       )),
     );

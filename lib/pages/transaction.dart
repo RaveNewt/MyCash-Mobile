@@ -137,36 +137,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ));
     }
 
-    // Widget choose() {
-    //   return Container(
-    //       padding: EdgeInsets.symmetric(horizontal: 24),
-    //       margin: EdgeInsets.only(top: 24),
-    //       child: Column(
-    //         children: [
-    //           Text(
-    //             "Amount",
-    //             style: primaryTextStyle.copyWith(
-    //               fontSize: 16,
-    //               fontWeight: regular,
-    //             ),
-    //           ),
-    //           SizedBox(
-    //             height: 7,
-    //           ),
-    //           DropdownButton(items: [
-    //             DropdownMenuItem(
-    //               child: Text("Income"),
-    //               value: _dropdownValue,
-    //             ),
-    //             DropdownMenuItem(
-    //               child: Text("Expenses"),
-    //               value: _dropdownValue,
-    //             ),
-    //           ], onChanged: dropdownCallback(_dropdownValue))
-    //         ],
-    //       ));
-    // }
-
     Widget submitButton() {
       return Container(
         height: 50,
@@ -200,51 +170,48 @@ class _TransactionScreenState extends State<TransactionScreen> {
             SizedBox(
               width: defaultMargin,
             ),
-            Container(
-              width: 100,
-              height: 40,
-              margin: EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: primaryColor,
-              ),
-              child: TextButton(
-                onPressed: changeIncome,
-                style: TextButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Income',
+            ChoiceChip(
+              label: Text("Income",
                   style: primaryTextStyle.copyWith(
-                      fontSize: 16, fontWeight: medium, color: bglight),
-                ),
+                      fontSize: 16,
+                      fontWeight: medium,
+                      color: isIncome ? bglight : blackColor)),
+              selected: isIncome ? true : false,
+              selectedColor: primaryColor,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
+              onSelected: (value) {
+                if (value) {
+                  setState(() {
+                    changeIncome();
+                  });
+                }
+              },
             ),
-            Container(
-              width: 100,
-              height: 40,
-              margin: EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: primaryColor,
-              ),
-              child: TextButton(
-                onPressed: changeExpenses,
-                style: TextButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Expenses',
+            SizedBox(
+              width: 16,
+            ),
+            ChoiceChip(
+              label: Text("Expense",
                   style: primaryTextStyle.copyWith(
-                      fontSize: 16, fontWeight: medium, color: bglight),
-                ),
+                      fontSize: 16,
+                      fontWeight: medium,
+                      color: isIncome ? blackColor : bglight)),
+              selected: isIncome ? false : true,
+              selectedColor: primaryColor,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
+              onSelected: (value) {
+                if (value) {
+                  setState(() {
+                    changeExpenses();
+                  });
+                }
+              },
             ),
           ],
         ),
@@ -269,17 +236,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.close,
-              color: bglight,
-            ),
-          ),
-        ],
         title: Text(
           'Transaction',
           style: primaryTextStyle.copyWith(color: bglight),

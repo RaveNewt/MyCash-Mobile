@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
+import 'package:my_cash_mobile/providers/data_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:my_cash_mobile/widget/loading_button.dart';
 import 'package:provider/provider.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
 
     handleSignUp() async {
       Navigator.pushNamed(context, '/sign-up');
@@ -33,6 +37,10 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       )) {
+        Provider.of<DataProvider>(context, listen: false)
+            .getIncome(userid: user.id);
+        Provider.of<DataProvider>(context, listen: false)
+            .getExpense(userid: user.id);
         Navigator.pushNamed(context, '/main');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -85,9 +93,14 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 7,
               ),
-              TextField(
+              TextFormField(
                 controller: emailController,
                 cursorColor: primaryColor,
+                validator: MultiValidator([
+                  EmailValidator(errorText: 'enter a valid email address'),
+                  RequiredValidator(errorText: 'email is required')
+                ]),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -122,10 +135,16 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 7,
               ),
-              TextField(
+              TextFormField(
                 controller: passwordController,
                 cursorColor: primaryColor,
                 obscureText: true,
+                validator: MultiValidator([
+                  RequiredValidator(errorText: 'password is required'),
+                  MinLengthValidator(6,
+                      errorText: 'password should be at least 6 digits')
+                ]),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),

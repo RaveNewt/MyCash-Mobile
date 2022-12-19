@@ -3,7 +3,7 @@ import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/services/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
-  late UserModel _user;
+  UserModel _user = UserModel();
 
   UserModel get user => _user;
 

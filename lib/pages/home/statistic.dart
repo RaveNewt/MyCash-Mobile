@@ -75,51 +75,50 @@ class _StatisticPageState extends State<StatisticPage> {
             SizedBox(
               width: defaultMargin,
             ),
-            Container(
-              width: 100,
-              height: 40,
-              margin: EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: primaryColor,
-              ),
-              child: TextButton(
-                onPressed: changeIncome,
-                style: TextButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Income',
+            ChoiceChip(
+              label: Text("Income",
                   style: primaryTextStyle.copyWith(
-                      fontSize: 16, fontWeight: medium, color: bglight),
-                ),
+                      fontSize: 16,
+                      fontWeight: medium,
+                      color: isIncome ? bglight : blackColor)),
+              selected: isIncome ? true : false,
+              disabledColor: bglight,
+              selectedColor: primaryColor,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
+              onSelected: (value) {
+                if (value) {
+                  setState(() {
+                    changeIncome();
+                  });
+                }
+              },
             ),
-            Container(
-              width: 100,
-              height: 40,
-              margin: EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: primaryColor,
-              ),
-              child: TextButton(
-                onPressed: changeExpenses,
-                style: TextButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Expenses',
+            SizedBox(
+              width: 16,
+            ),
+            ChoiceChip(
+              label: Text("Expense",
                   style: primaryTextStyle.copyWith(
-                      fontSize: 16, fontWeight: medium, color: bglight),
-                ),
+                      fontSize: 16,
+                      fontWeight: medium,
+                      color: isIncome ? blackColor : bglight)),
+              selected: isIncome ? false : true,
+              disabledColor: bglight,
+              selectedColor: primaryColor,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
+              onSelected: (value) {
+                if (value) {
+                  setState(() {
+                    changeExpenses();
+                  });
+                }
+              },
             ),
           ],
         ),

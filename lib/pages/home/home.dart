@@ -27,8 +27,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   getInit() async {
+    // AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    // UserModel user = authProvider.user;
+    // Provider.of<DataProvider>(context, listen: false)
+    //     .getIncome(userid: userid);
+    // Provider.of<DataProvider>(context, listen: false)
+    //     .getExpense(userid: user.id);
     // await Provider.of<TransactionProvider>(context, listen: false)
-    //     .getSUM(userid: 1);
+    //     .getSUM(userid: user.id);
   }
 
   Widget build(BuildContext context) {
@@ -46,6 +52,7 @@ class _HomePageState extends State<HomePage> {
         .getIncome(userid: user.id);
     Provider.of<DataProvider>(context, listen: false)
         .getExpense(userid: user.id);
+
     Provider.of<TransactionProvider>(context, listen: false)
         .getSUM(userid: user.id);
 
@@ -54,8 +61,7 @@ class _HomePageState extends State<HomePage> {
     changeIncome() async {
       await Provider.of<DataProvider>(context, listen: false)
           .getIncome(userid: user.id);
-      await Provider.of<TransactionProvider>(context, listen: false)
-          .getSUM(userid: user.id);
+
       setState(() {
         isIncome = true;
         print(isIncome);
@@ -140,85 +146,116 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            child: Column(
-              children: [
-                Center(
-                  widthFactor: 1,
-                  child: Text("Total Balance",
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Text("Total Balance",
+                        style: primaryTextStyle.copyWith(
+                            fontSize: 16, fontWeight: regular, color: bglight)),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text("Rp. ${transaction.total_amount}",
                       style: primaryTextStyle.copyWith(
-                          fontSize: 11, fontWeight: regular, color: bglight)),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text("${transaction.total_amount}",
-                    style: primaryTextStyle.copyWith(
-                        fontSize: 32,
-                        fontWeight: semiBold,
-                        color: primaryColor)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 100,
-                      margin: EdgeInsets.only(top: 16),
-                      child: TextButton(
-                        onPressed: (() => {
-                              setState(() {
-                                isLoading = true;
-                              }),
-                              Future.delayed(Duration(seconds: 2), () {
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              })
-                            }),
-                        style: TextButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: Text(
-                          'Income',
-                          style: primaryTextStyle.copyWith(
-                              fontSize: 16, fontWeight: medium, color: bglight),
-                        ),
+                          fontSize: 32,
+                          fontWeight: semiBold,
+                          color: primaryColor)),
+                  SizedBox(height: 12),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.health_and_safety,
+                        color: primaryColor,
                       ),
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Container(
-                      width: 100,
-                      margin: EdgeInsets.only(top: 16),
-                      child: TextButton(
-                        onPressed: (() => {
-                              setState(() {
-                                isLoading = true;
-                              }),
-                              Future.delayed(Duration(seconds: 2), () {
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              })
-                            }),
-                        style: TextButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: Text(
-                          'Expenses',
-                          style: primaryTextStyle.copyWith(
-                              fontSize: 16, fontWeight: medium, color: bglight),
-                        ),
+                      SizedBox(
+                        width: 8,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Text("Status:",
+                          style: primaryTextStyle.copyWith(
+                              fontSize: 16,
+                              fontWeight: regular,
+                              color: bglight)),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text("${transaction.user_status}",
+                          style: primaryTextStyle.copyWith(
+                              fontSize: 16,
+                              fontWeight: semiBold,
+                              color: primaryColor)),
+                    ],
+                  ),
+
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Container(
+                  //       width: 100,
+                  //       margin: EdgeInsets.only(top: 16),
+                  //       child: TextButton(
+                  //         onPressed: (() => {
+                  //               setState(() {
+                  //                 isLoading = true;
+                  //               }),
+                  //               Future.delayed(Duration(seconds: 2), () {
+                  //                 setState(() {
+                  //                   isLoading = false;
+                  //                 });
+                  //               })
+                  //             }),
+                  //         style: TextButton.styleFrom(
+                  //           backgroundColor: primaryColor,
+                  //           shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(12),
+                  //           ),
+                  //         ),
+                  //         child: Text(
+                  //           'Income',
+                  //           style: primaryTextStyle.copyWith(
+                  //               fontSize: 16, fontWeight: medium, color: bglight),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     SizedBox(
+                  //       width: 16,
+                  //     ),
+                  //     Container(
+                  //       width: 100,
+                  //       margin: EdgeInsets.only(top: 16),
+                  //       child: TextButton(
+                  //         onPressed: (() => {
+                  //               setState(() {
+                  //                 isLoading = true;
+                  //               }),
+                  //               Future.delayed(Duration(seconds: 2), () {
+                  //                 setState(() {
+                  //                   isLoading = false;
+                  //                 });
+                  //               })
+                  //             }),
+                  //         style: TextButton.styleFrom(
+                  //           backgroundColor: primaryColor,
+                  //           shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(12),
+                  //           ),
+                  //         ),
+                  //         child: Text(
+                  //           'Expenses',
+                  //           style: primaryTextStyle.copyWith(
+                  //               fontSize: 16, fontWeight: medium, color: bglight),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                ],
+              ),
             )),
       );
     }
@@ -233,51 +270,50 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               width: defaultMargin,
             ),
-            Container(
-              width: 100,
-              height: 40,
-              margin: EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: primaryColor,
-              ),
-              child: TextButton(
-                onPressed: changeIncome,
-                style: TextButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Income',
+            ChoiceChip(
+              label: Text("Income",
                   style: primaryTextStyle.copyWith(
-                      fontSize: 16, fontWeight: medium, color: bglight),
-                ),
+                      fontSize: 16,
+                      fontWeight: medium,
+                      color: isIncome ? bglight : blackColor)),
+              selected: isIncome ? true : false,
+              disabledColor: bglight,
+              selectedColor: primaryColor,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
+              onSelected: (value) {
+                if (value) {
+                  setState(() {
+                    changeIncome();
+                  });
+                }
+              },
             ),
-            Container(
-              width: 100,
-              height: 40,
-              margin: EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: primaryColor,
-              ),
-              child: TextButton(
-                onPressed: changeExpenses,
-                style: TextButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Expenses',
+            SizedBox(
+              width: 16,
+            ),
+            ChoiceChip(
+              label: Text("Expense",
                   style: primaryTextStyle.copyWith(
-                      fontSize: 16, fontWeight: medium, color: bglight),
-                ),
+                      fontSize: 16,
+                      fontWeight: medium,
+                      color: isIncome ? blackColor : bglight)),
+              selected: isIncome ? false : true,
+              disabledColor: bglight,
+              selectedColor: primaryColor,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
+              onSelected: (value) {
+                if (value) {
+                  setState(() {
+                    changeExpenses();
+                  });
+                }
+              },
             ),
           ],
         ),
