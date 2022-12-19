@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:my_cash_mobile/widget/loading_button.dart';
@@ -95,9 +96,11 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 7,
               ),
-              TextField(
+              TextFormField(
                 controller: fullnameController,
                 cursorColor: primaryColor,
+                validator: MultiValidator(
+                    [RequiredValidator(errorText: 'Name is required')]),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -132,10 +135,12 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 7,
               ),
-              TextField(
+              TextFormField(
                 keyboardType: TextInputType.number,
                 controller: ageController,
                 cursorColor: primaryColor,
+                validator: MultiValidator(
+                    [RequiredValidator(errorText: 'Age is required')]),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -170,10 +175,12 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 7,
               ),
-              TextField(
+              TextFormField(
                 keyboardType: TextInputType.number,
                 controller: phoneController,
                 cursorColor: primaryColor,
+                validator: MultiValidator(
+                    [RequiredValidator(errorText: 'Phone is required')]),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -208,9 +215,13 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 7,
               ),
-              TextField(
+              TextFormField(
                 controller: emailController,
                 cursorColor: primaryColor,
+                validator: MultiValidator([
+                  RequiredValidator(errorText: 'name is required'),
+                  EmailValidator(errorText: 'Invalid email address')
+                ]),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -245,9 +256,11 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 7,
               ),
-              TextField(
+              TextFormField(
                 controller: passwordController,
                 cursorColor: primaryColor,
+                validator: MultiValidator(
+                    [RequiredValidator(errorText: 'Password is required')]),
                 obscureText: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
