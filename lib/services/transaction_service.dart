@@ -5,7 +5,7 @@ import 'package:my_cash_mobile/models/transaction_model.dart';
 import 'package:http/http.dart' as http;
 
 class TransactionService {
-  String baseUrl = 'http://10.0.2.2:3000';
+  String baseUrl = 'http://13.250.110.90:3000';
   // String baseUrl = 'https://reqres.in';
 
   Future<TransactionModel> income({

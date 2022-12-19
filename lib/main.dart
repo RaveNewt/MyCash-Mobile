@@ -14,10 +14,13 @@ import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:my_cash_mobile/providers/data_provider.dart';
 import 'package:my_cash_mobile/providers/page_provider.dart';
 import 'package:my_cash_mobile/providers/transaction_provider.dart';
+import 'package:my_cash_mobile/services/local_notification_service.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().initializePlatformNotifications(); // <----
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

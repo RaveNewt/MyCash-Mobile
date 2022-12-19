@@ -7,7 +7,7 @@ import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class DataService {
-  String baseUrl = 'http://10.0.2.2:3000';
+  String baseUrl = 'http://13.250.110.90:3000';
 
   Future<List<TransactionModel>> getIncome({int? userid, int? amount}) async {
     // AuthProvider authProvider = Provider.of<AuthProvider>(context);
