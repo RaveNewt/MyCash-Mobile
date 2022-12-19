@@ -16,6 +16,8 @@ class TransactionModel {
     user_status = json['user_status'];
   }
 
+  get week => null;
+
   Map<String, dynamic> toJson() {
     return {
       'userID': userid,

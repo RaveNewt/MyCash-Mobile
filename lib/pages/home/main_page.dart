@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_cash_mobile/models/transaction_model.dart';
 import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/pages/home/article.dart';
 import 'package:my_cash_mobile/pages/home/home.dart';
@@ -7,6 +8,7 @@ import 'package:my_cash_mobile/pages/home/statistic.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:my_cash_mobile/providers/page_provider.dart';
 import 'package:my_cash_mobile/providers/transaction_provider.dart';
+import 'package:my_cash_mobile/services/local_notification_service.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +22,33 @@ bool isLoading = false;
 bool isIncome = true;
 
 class _MainPageState extends State<MainPage> {
+  late final NotificationService notificationService;
+  @override
+  void initState() {
+    notificationService = NotificationService();
+    Trigger();
+    listenToNotificationStream();
+    notificationService.initializePlatformNotifications();
+    super.initState();
+  }
+
+  void listenToNotificationStream() =>
+      notificationService.behaviorSubject.listen((payload) {
+        Navigator.pushNamed(context, '/main', arguments: payload);
+      });
+  void Trigger() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      TransactionProvider transactionProvider =
+          Provider.of<TransactionProvider>(context, listen: false);
+      TransactionModel transaction = transactionProvider.transaction;
+      notificationService.showPeriodicLocalNotification(
+          id: 0,
+          title: 'Status Finacial',
+          body: '${transaction.user_status}',
+          payload: 'User Status');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);

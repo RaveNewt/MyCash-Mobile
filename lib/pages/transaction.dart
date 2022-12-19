@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
+import 'package:my_cash_mobile/providers/chart_provider.dart';
 import 'package:my_cash_mobile/providers/transaction_provider.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           SnackBar(
             backgroundColor: dangerColor,
             content: Text(
-              'Gagal Register!',
+              'Gagal masukin Jumlah!',
               textAlign: TextAlign.center,
             ),
           ),
@@ -88,7 +89,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           SnackBar(
             backgroundColor: dangerColor,
             content: Text(
-              'Gagal Register!',
+              'Gagal masukin Jumlah!',
               textAlign: TextAlign.center,
             ),
           ),

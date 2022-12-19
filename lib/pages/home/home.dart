@@ -5,6 +5,7 @@ import 'package:my_cash_mobile/models/user_model.dart';
 import 'package:my_cash_mobile/providers/auth_provider.dart';
 import 'package:my_cash_mobile/providers/data_provider.dart';
 import 'package:my_cash_mobile/providers/transaction_provider.dart';
+import 'package:my_cash_mobile/services/local_notification_service.dart';
 import 'package:my_cash_mobile/theme.dart';
 import 'package:my_cash_mobile/widget/data_list.dart';
 import 'package:provider/provider.dart';
@@ -19,22 +20,55 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isLoading = false;
   bool isIncome = true;
+  late final NotificationService notificationService;
 
   @override
   void initState() {
     getInit();
+    notificationService = NotificationService();
+    Trigger();
+
+    listenToNotificationStream();
+    notificationService.initializePlatformNotifications();
     super.initState();
   }
 
-  getInit() async {
-    // AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    // UserModel user = authProvider.user;
-    // Provider.of<DataProvider>(context, listen: false)
-    //     .getIncome(userid: userid);
-    // Provider.of<DataProvider>(context, listen: false)
-    //     .getExpense(userid: user.id);
-    // await Provider.of<TransactionProvider>(context, listen: false)
-    //     .getSUM(userid: user.id);
+  void listenToNotificationStream() =>
+      notificationService.behaviorSubject.listen((payload) {
+        Navigator.pushNamed(context, '/main', arguments: payload);
+      });
+  void Trigger() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      TransactionProvider transactionProvider =
+          Provider.of<TransactionProvider>(context, listen: false);
+      TransactionModel transaction = transactionProvider.transaction;
+      notificationService.showPeriodicLocalNotification(
+          id: 0,
+          title: 'Status Finacial',
+          body: '${transaction.user_status}',
+          payload: 'User Status');
+    });
+  }
+
+  void getInit() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      AuthProvider authProvider =
+          Provider.of<AuthProvider>(context, listen: false);
+      UserModel user = authProvider.user;
+      DataProvider dataProvider =
+          Provider.of<DataProvider>(context, listen: false);
+      Provider.of<DataProvider>(context, listen: false)
+          .getIncome(userid: user.id);
+      Provider.of<DataProvider>(context, listen: false)
+          .getExpense(userid: user.id);
+      Provider.of<TransactionProvider>(context, listen: false)
+          .getSUM(userid: user.id);
+
+      TransactionProvider? transactionProvider =
+          Provider.of<TransactionProvider>(context, listen: false);
+      TransactionModel? transaction = transactionProvider.transaction;
+      List<TransactionModel> datas = dataProvider.datas;
+    });
   }
 
   Widget build(BuildContext context) {

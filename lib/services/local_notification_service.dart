@@ -10,7 +10,7 @@ import 'package:timezone/timezone.dart' as tz;
 class NotificationService {
   NotificationService();
 
-  final _localNotifications = FlutterLocalNotificationsPlugin();
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final BehaviorSubject<String> behaviorSubject = BehaviorSubject();
 
   Future<void> initializePlatformNotifications() async {
@@ -29,8 +29,12 @@ class NotificationService {
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
+    DateTime dateTime = DateTime.now();
+    tz.initializeTimeZones();
+    tz.setLocalLocation(
+        tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()));
 
-    await _localNotifications.initialize(initializationSettings,
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: selectNotification);
   }
 
@@ -51,7 +55,8 @@ class NotificationService {
       threadIdentifier: "thread1",
     );
 
-    final details = await _localNotifications.getNotificationAppLaunchDetails();
+    final details =
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     if (details != null && details.didNotificationLaunchApp) {
       behaviorSubject.add(details.payload!);
     }
@@ -68,12 +73,51 @@ class NotificationService {
     required String payload,
   }) async {
     final platformChannelSpecifics = await _notificationDetails();
-    await _localNotifications.show(
+    await flutterLocalNotificationsPlugin.show(
       id,
       title,
       body,
       platformChannelSpecifics,
       payload: payload,
+    );
+  }
+
+  Future<void> showScheduledLocalNotification({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+    required int seconds,
+  }) async {
+    final platformChannelSpecifics = await _notificationDetails();
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      tz.TZDateTime.now(tz.local).add(Duration(seconds: seconds)),
+      platformChannelSpecifics,
+      payload: payload,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+    );
+  }
+
+  Future<void> showPeriodicLocalNotification({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+  }) async {
+    final platformChannelSpecifics = await _notificationDetails();
+    await flutterLocalNotificationsPlugin.periodicallyShow(
+      id,
+      title,
+      body,
+      RepeatInterval.everyMinute,
+      platformChannelSpecifics,
+      payload: payload,
+      androidAllowWhileIdle: true,
     );
   }
 
@@ -86,5 +130,16 @@ class NotificationService {
     if (payload != null && payload.isNotEmpty) {
       behaviorSubject.add(payload);
     }
+  }
+
+  Future<void> requestIOSPermissions() async {
+    final bool? result = await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
   }
 }

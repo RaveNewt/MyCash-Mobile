@@ -11,7 +11,7 @@ class ArticlePage extends StatefulWidget {
 class _ArticlePageState extends State<ArticlePage> {
   @override
   Widget build(BuildContext context) {
-    Widget Card() {
+    Widget Card(String image, String title, String description) {
       return GestureDetector(
         onTap: () {},
         child: Container(
@@ -39,7 +39,7 @@ class _ArticlePageState extends State<ArticlePage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
-                  'assets/illustration/media.png',
+                  '${image}',
                   width: double.infinity,
                   height: 200,
                   fit: BoxFit.cover,
@@ -54,7 +54,7 @@ class _ArticlePageState extends State<ArticlePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Investment in Indonesia",
+                      "${title}",
                       style: primaryTextStyle.copyWith(
                         fontSize: 24,
                         fontWeight: semiBold,
@@ -64,7 +64,7 @@ class _ArticlePageState extends State<ArticlePage> {
                       height: 6,
                     ),
                     Text(
-                      "Investment is the most important economic factor for a nation. It is the building blocks on which an economy is built. Investment leads to asset creations, ...",
+                      "${description}",
                       style: primaryTextStyle.copyWith(
                         fontSize: 14,
                       ),
@@ -84,10 +84,23 @@ class _ArticlePageState extends State<ArticlePage> {
         backgroundColor: primaryColor,
         title: Text('Article'),
       ),
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: defaultMargin),
-          child: Column(children: [Card()]),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: defaultMargin),
+            child: Column(children: [
+              Card("assets/illustration/media.png", "Investment in Indonesia",
+                  "Investment is the most important economic factor for a nation. It is the building blocks on which an economy is built. Investment leads to asset creations, ..."),
+              Card(
+                  "assets/illustration/media-2.png",
+                  "Financial Health: Definition and How to Measure and Improve It",
+                  "Financial health is a term used to describe the state of one's personal monetary affairs. There are many dimensions to financial health, including the amount of savings you have, how much you’re putting away for retirement,"),
+              Card(
+                  "assets/illustration/media-3.png",
+                  "Mengenal Financial Freedom dan Cara Mencapainya di Usia Muda",
+                  "Financial freedom bisa diartikan sebagai kemapanan finansial untuk seorang individu. Saat seseorang sudah mencapai kebebasan finansial, maka tidak ada lagi kekhawatiran untuk kekurangan uang saat membeli barang-barang atau memenuhi kebutuhan yang diinginkan."),
+            ]),
+          ),
         ),
       ),
     );

@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().initializePlatformNotifications(); // <----
+  await NotificationService().requestIOSPermissions();
   runApp(MyApp());
 }
 

@@ -45,8 +45,25 @@ class _StatisticPageState extends State<StatisticPage> {
     DataProvider dataProvider = Provider.of<DataProvider>(context);
     UserModel user = authProvider.user;
     List<TransactionModel> datas = dataProvider.datas;
+    datas.length;
+    print(datas.length);
     TransactionProvider? transactionProvider =
         Provider.of<TransactionProvider>(context);
+    final _week = [0, 0, 0, 0, 0, 0, 0];
+
+    List<String> weekText() {
+      return [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+      ];
+    }
+
     changeIncome() async {
       await Provider.of<DataProvider>(context, listen: false)
           .getIncome(userid: user.id);
@@ -140,12 +157,16 @@ class _StatisticPageState extends State<StatisticPage> {
                 {"domain": "5", "measure": 30000},
               ],
 
-              // 'data': List.generate(7, (index) {
+              // 'data': List.generate(8, (index) {
               //   return {
-              //     'domain': cHome.weekText()[index],
-              //     'measure': cHome.week[index]
+              //     'domain': weekText()[index],
+              //     'measure': datas
+              //         .map((e) =>
+              //             dataProvider.getIncome(userid: user.id).toString())
+              //         .toList()[index],
               //   };
-            },
+              // }),
+            }
           ],
           domainLabelPaddingToAxisLine: 8,
           axisLineTick: 2,
@@ -159,49 +180,55 @@ class _StatisticPageState extends State<StatisticPage> {
     }
 
     return Scaffold(
-        body: SafeArea(
-          child: Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Category(),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  Text('Statistic Page'),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  // Center(
-                  //   child: Container(
-                  //     child: SfCartesianChart(
-                  //       primaryXAxis: NumericAxis(),
-                  //       primaryYAxis: NumericAxis(),
-                  //       series: <ColumnSeries<TransactionModel, num>>[
-                  //         ColumnSeries<TransactionModel, num>(
-                  //             dataSource: datas,
-                  //             xValueMapper: (TransactionModel datas, _) =>
-                  //                 datas.userid,
-                  //             yValueMapper: (TransactionModel datas, _) =>
-                  //                 datas.amount,
-                  //             dataLabelSettings:
-                  //                 DataLabelSettings(isVisible: true)),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  weekly(),
-                ],
-              )),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            changeIncome();
-          },
-          child: const Icon(Icons.refresh, color: Colors.white),
-        ));
+      body: SafeArea(
+        child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Center(widthFactor: 1, child: Category()),
+                SizedBox(
+                  height: 250,
+                ),
+                Center(
+                    heightFactor: 1,
+                    widthFactor: 1,
+                    child: Text(
+                      'Feature is Not Available',
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 32,
+                        fontWeight: medium,
+                      ),
+                    )),
+                SizedBox(
+                  height: 12,
+                ),
+                // Center(
+                //   child: Container(
+                //     child: SfCartesianChart(
+                //       primaryXAxis: NumericAxis(),
+                //       primaryYAxis: NumericAxis(),
+                //       series: <ColumnSeries<TransactionModel, num>>[
+                //         ColumnSeries<TransactionModel, num>(
+                //             dataSource: datas,
+                //             xValueMapper: (TransactionModel datas, _) =>
+                //                 datas.userid,
+                //             yValueMapper: (TransactionModel datas, _) =>
+                //                 datas.amount,
+                //             dataLabelSettings:
+                //                 DataLabelSettings(isVisible: true)),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+              ],
+            )),
+      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     changeIncome();
+      //   },
+      //   child: const Icon(Icons.refresh, color: Colors.white),
+      // )
+    );
   }
 }

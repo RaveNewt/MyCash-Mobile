@@ -27,15 +27,11 @@ class TransactionService {
       );
 
       print(response.body);
+      print(response.statusCode);
       print(url);
-      var data = jsonDecode(response.body);
-      TransactionModel transaction = TransactionModel.fromJson(data);
-      print(data);
-      if (response.statusCode == 201) {
-        var data = jsonDecode(response.body); //['data'];
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body)['data']; //['data'];
         TransactionModel transaction = TransactionModel.fromJson(data);
-        // data.token = 'Bearer ' + data['access_token'];
-        // print(data['user']);
         return transaction;
       } else {
         throw Exception('Gagal masukkin data');
@@ -65,11 +61,9 @@ class TransactionService {
 
       print(response.body);
       print(response.statusCode);
-      var data = jsonDecode(response.body);
-      TransactionModel transaction = TransactionModel.fromJson(data);
-      print(data);
-      if (response.statusCode == 201) {
-        var data = jsonDecode(response.body); //['data'];
+      print(url);
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body)['data']; //['data'];
         TransactionModel transaction = TransactionModel.fromJson(data);
         // data.token = 'Bearer ' + data['access_token'];
         // print(data['user']);

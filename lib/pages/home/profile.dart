@@ -16,9 +16,12 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late final NotificationService notificationService;
+
   @override
   void initState() {
     notificationService = NotificationService();
+    Trigger();
+
     listenToNotificationStream();
     notificationService.initializePlatformNotifications();
     super.initState();
@@ -28,6 +31,36 @@ class _ProfilePageState extends State<ProfilePage> {
       notificationService.behaviorSubject.listen((payload) {
         Navigator.pushNamed(context, '/main', arguments: payload);
       });
+  void Trigger() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      TransactionProvider transactionProvider =
+          Provider.of<TransactionProvider>(context, listen: false);
+      TransactionModel transaction = transactionProvider.transaction;
+      switch (transaction.user_status) {
+        case "Health":
+          notificationService.showLocalNotification(
+              id: 0,
+              title: "Status Financial:",
+              body: "${transaction.user_status}",
+              payload: "Notification");
+          break;
+        case "Balance":
+          notificationService.showLocalNotification(
+              id: 0,
+              title: "Status Financial:",
+              body: "${transaction.user_status}",
+              payload: "Notification");
+          break;
+        case "Minus":
+          notificationService.showLocalNotification(
+              id: 0,
+              title: "Status Financial:",
+              body: "${transaction.user_status}",
+              payload: "Notification");
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +73,30 @@ class _ProfilePageState extends State<ProfilePage> {
 
     Provider.of<TransactionProvider>(context, listen: false)
         .getSUM(userid: user.id);
+
+    // switch (transaction.user_status) {
+    //   case "Health":
+    //     notificationService.showLocalNotification(
+    //         id: 0,
+    //         title: "Status Financial:",
+    //         body: "${transaction.user_status}",
+    //         payload: "Notification");
+    //     break;
+    //   case "Balance":
+    //     notificationService.showLocalNotification(
+    //         id: 0,
+    //         title: "Status Financial:",
+    //         body: "${transaction.user_status}",
+    //         payload: "Notification");
+    //     break;
+    //   case "Minus":
+    //     notificationService.showLocalNotification(
+    //         id: 0,
+    //         title: "Status Financial:",
+    //         body: "${transaction.user_status}",
+    //         payload: "Notification");
+    //     break;
+    // }
 
     Widget Header() {
       return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
